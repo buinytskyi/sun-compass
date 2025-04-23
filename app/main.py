@@ -6,7 +6,7 @@ from suntime import Sun
 from stateful.config import Config
 from modules.scanline import Scanline
 from modules.globemap import Globemap
-from modules.ui import Circular, Text,  Cross
+from modules.ui import Circular, Text, Cardinal
 
 class SolarCompass:
     def __init__(self):
@@ -42,7 +42,7 @@ class SolarCompass:
         self.color = pygame.Color('forestgreen')
         self.color2 = pygame.Color('lime')
         self.color3 = pygame.Color('darkgreen')
-        self.color4 = pygame.Color('grey4')
+        self.color4 = pygame.Color('grey6')
         self.center = self.screen.get_rect().center
 
         #Class init
@@ -50,7 +50,7 @@ class SolarCompass:
         self.globemap = Globemap()
         self.circular = Circular( self.screen, self.center, self.radius, self.color, self.color2, self.color4, self.font, self.get_sr_angle(), self.get_ss_angle() )
         self.text = Text(self.screen, self.font, self.color)
-        self.cross = Cross(self.screen, self.color3)
+        self.cardinal = Cardinal(self.screen)
 
     def get_cr(self):
         return datetime.now(self.tz).strftime('%H:%M')
@@ -89,7 +89,11 @@ class SolarCompass:
         self.globemap.draw_geojson_country_borders(self.lon, self.lat, self.color3)
         self.text.draw(f"Day durration: ", (600, 760), self.get_dd())
         self.text.draw(f"{self.tz.zone}", (20, 760), self.get_cr())
-        self.cross.draw(center_x, center_y, 400, self.color3)
+        self.cardinal.draw(349, 10, "n_direction.png" )
+        self.cardinal.draw(690, 350, "e_direction.png")
+        self.cardinal.draw(352, 690, "s_direction.png" )
+        self.cardinal.draw(10, 352, "w_direction.png")
+        self.cardinal.draw(375, 375, "center.png")
         self.circular.draw_hour_ticks(self.get_sn_angle())
         self.circular.draw_clock_hand(self.get_sn_angle(), self.tz)
         self.circular.draw_border()

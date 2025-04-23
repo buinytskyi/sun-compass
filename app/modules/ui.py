@@ -1,5 +1,8 @@
+import os
+
 import pygame
 from datetime import datetime
+import os
 import math
 
 class Text:
@@ -13,13 +16,15 @@ class Text:
         text_surface = self.font.render(full_text, True, self.color)
         self.screen.blit(text_surface, pos)
 
-class Cross:
-    def __init__(self, screen, color):
+class Cardinal :
+    def __init__(self, screen):
         self.screen = screen
 
-    def draw(self, center_x, center_y, length, color):
-        pygame.draw.line(self.screen, color, (center_x, center_y - length), (center_x, center_y + length), 1)
-        pygame.draw.line(self.screen, color, (center_x - length, center_y), (center_x + length, center_y), 1)
+    def draw(self, position_x, position_y, filename):
+        assets_path = os.path.join(os.path.dirname(__file__), os.pardir, "assets", filename)
+        image = pygame.image.load(assets_path).convert_alpha()
+        image.set_colorkey((0, 0, 0))
+        self.screen.blit(image, (position_x, position_y))
 
 class Circular:
     def __init__(self, screen, center, radius, color, color2, color4, font, sr_angle, ss_angle):

@@ -1,5 +1,5 @@
 ## Sun Compass
-![Image](app/image.png)
+![Image](app/assets/image.png)
 
 This is a proof of concept of how to use sky bodies.</br>
 The combination of four dimensions (position on the geoid) and astronomic time,</br> allows to predict the position of the sun and the cardinal direction. 
