@@ -27,12 +27,13 @@ class SolarCompass:
         center_x = width // 2
         center_y = height // 2
         self.tz = pytz.timezone(tz)
-        sun = Sun(self.lat, self.lon)
 
         self.radius = 400
 
+        sun = Sun(self.lat, self.lon)
         self.today_sr = sun.get_sunrise_time()
         self.today_ss = sun.get_sunset_time()
+
         self.tz = pytz.timezone(str(self.tz))
         pygame.init()
         self.screen = pygame.display.set_mode((width, height), pygame.SCALED | pygame.FULLSCREEN )
@@ -139,14 +140,15 @@ class SolarCompass:
                             dy = prev_mouse_pos[1] - current_mouse_pos[1]
 
                             if dx > 0:
-                                lon_center += 0.5  # Move right
+                                lon_center = max(lon_center + 0.5, -180)  # Move left
                             elif dx < 0:
-                                lon_center -= 0.5  # Move left
+                                lon_center = min(lon_center - 0.5, 180)  # Move right
 
                             if dy > 0:
-                                lat_center = max(lat_center - 0.5, -90)  # Move down
+                                lat_center = max(lat_center - 0.5, -66)  # Move down
                             elif dy < 0:
-                                lat_center = min(lat_center + 0.5, 90)  # Move up
+                                lat_center = min(lat_center + 0.5, 66)  # Move up
+
                         prev_mouse_pos = current_mouse_pos
             self.lon = lon_center
             self.lat = lat_center
