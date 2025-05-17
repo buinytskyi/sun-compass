@@ -140,9 +140,11 @@ class SolarCompass:
                             dy = prev_mouse_pos[1] - current_mouse_pos[1]
 
                             if dx > 0:
-                                lon_center = max(lon_center + 0.5, -180)  # Move left
+                                lon_center = min(lon_center + 0.5, 180)  # Move right
+                                print(lon_center)
                             elif dx < 0:
-                                lon_center = min(lon_center - 0.5, 180)  # Move right
+                                lon_center = max(lon_center - 0.5, -180)  # Move left
+                                print(lon_center)
 
                             if dy > 0:
                                 lat_center = max(lat_center - 0.5, -66)  # Move down
