@@ -39,7 +39,6 @@ class SolarCompass:
         self.screen = pygame.display.set_mode((width, height), pygame.SCALED | pygame.FULLSCREEN )
         self.clock = pygame.time.Clock()
         self.running = False
-        self.font = pygame.font.Font(None, 24)
         self.color = pygame.Color('forestgreen')
         self.color2 = pygame.Color('lime')
         self.color3 = pygame.Color('darkgreen')
@@ -49,8 +48,8 @@ class SolarCompass:
         #Class init
         self.scanline_manager = Scanline(self.screen, width, height, speed=10)
         self.globemap = Globemap()
-        self.circular = Circular( self.screen, self.center, self.radius, self.color, self.color2, self.color4, self.font, self.get_sr_angle(), self.get_ss_angle() )
-        self.text = Text(self.screen, self.font, self.color)
+        self.circular = Circular( self.screen, self.center, self.radius, self.color, self.color2, self.color4, self.get_sr_angle(), self.get_ss_angle() )
+        self.text = Text(self.screen, self.color)
         self.cardinal = Cardinal(self.screen)
 
     def get_cr(self):
@@ -88,8 +87,10 @@ class SolarCompass:
         self.circular.draw_sector()
         self.globemap.draw_geojson_coastlines(self.lon, self.lat, self.color3)  # Map
         self.globemap.draw_geojson_country_borders(self.lon, self.lat, self.color3)
-        self.text.draw(f"Day durration: ", (600, 760), self.get_dd())
-        self.text.draw(f"{self.tz.zone}", (20, 760), self.get_cr())
+        self.text.draw((350, 240),'62', self.get_cr())
+        self.text.draw((340, 220),'32', f"{self.tz.zone}")
+        self.text.draw((335, 520),'32', f"Day length")
+        self.text.draw((320, 540),'62', self.get_dd())
         self.cardinal.draw(349, 10, "n_direction.png" )
         self.cardinal.draw(690, 350, "e_direction.png")
         self.cardinal.draw(352, 690, "s_direction.png" )

@@ -6,13 +6,13 @@ import os
 import math
 
 class Text:
-    def __init__(self, screen, font, color):
+    def __init__(self, screen, color):
         self.screen = screen
-        self.font = font
         self.color = color
 
-    def draw(self, text, pos, value):
-        full_text = f"{text} {value}"
+    def draw(self, pos, font_size, value):
+        full_text = f"{value}"
+        self.font = pygame.font.Font(None, int(font_size))
         text_surface = self.font.render(full_text, True, self.color)
         self.screen.blit(text_surface, pos)
 
@@ -27,14 +27,14 @@ class Cardinal :
         self.screen.blit(image, (position_x, position_y))
 
 class Circular:
-    def __init__(self, screen, center, radius, color, color2, color4, font, sr_angle, ss_angle):
+    def __init__(self, screen, center, radius, color, color2, color4, sr_angle, ss_angle):
         self.screen = screen
         self.center = center
         self.radius = radius
         self.color = color
         self.color2 = color2
         self.color4 = color4
-        self.font = font
+        self.font = pygame.font.Font(None, 32)
         self.start_angle = sr_angle
         self.end_angle = ss_angle
 
@@ -60,14 +60,18 @@ class Circular:
         cr_angle = (((int(datetime.now(tz).strftime('%H')) * 15) +
                      (int(datetime.now(tz).strftime('%M')) / 4)) + get_sn_angle)
 
-        vec_hand = pygame.math.Vector2(0, -self.radius).rotate(cr_angle)
-        end_x, end_y = self.center[0] + vec_hand.x, self.center[1] + vec_hand.y
+        vec_outer = pygame.math.Vector2(0, -self.radius).rotate(cr_angle)
+        vec_inner = pygame.math.Vector2(0, -(self.radius - 390)).rotate(cr_angle)
+        vec_shadow_outer = pygame.math.Vector2(0, -self.radius).rotate(cr_angle + 180)
+        vec_shadow_inner = pygame.math.Vector2(0, -(self.radius - 390)).rotate(cr_angle + 180)
 
-        vec_shadow = pygame.math.Vector2(0, -self.radius).rotate(cr_angle + 180)
-        shadow_x, shadow_y = self.center[0] + vec_shadow.x, self.center[1] + vec_shadow.y
+        end_x, end_y = self.center[0] + vec_outer.x, self.center[1] + vec_outer.y
+        start_x, start_y = self.center[0] + vec_inner.x, self.center[1] + vec_inner.y
+        end_shadow_x, end_shadow_y = self.center[0] + vec_shadow_outer.x, self.center[1] + vec_shadow_outer.y
+        start_shadow_x, start_shadow_y = self.center[0] + vec_shadow_inner.x, self.center[1] + vec_shadow_inner.y
 
-        pygame.draw.line(self.screen, self.color2, self.center, (end_x, end_y), 5)
-        pygame.draw.line(self.screen, self.color2, self.center, (shadow_x, shadow_y), 2)
+        pygame.draw.line(self.screen, self.color2, (start_x, start_y), (end_x, end_y), 5)
+        pygame.draw.line(self.screen, self.color2, (start_shadow_x, start_shadow_y), (end_shadow_x, end_shadow_y), 2)
 
     def draw_border(self):
         pygame.draw.circle(self.screen, self.color2, self.center, self.radius, 1)
